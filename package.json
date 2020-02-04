@@ -1,0 +1,18 @@
+{
+  "name": "spark-server",
+  "version": "0.1.0",
+  "description": "A server for the Spark app.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.cs.ecu.edu/csci-4230-spring-2020/tko-d/spark-server.git"
+  },
+  "author": "Patrick Emery",
+  "license": "MIT"
+}
