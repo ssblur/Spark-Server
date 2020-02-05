@@ -7,23 +7,22 @@
  */
 
 /**
- * index.main
- * Arguments:
- *      args - Array (String), The command line arguments provided.
- * Returns:
- *      undefined / None
+ * The main function when called from a command line.
+ * Launching this way automatically launches a node web server.
+ * @param Array<String> args        The command line arguments provided.
+ * @return void
  */
 function main( args ){
 
 }
 
 /**
- * index.index
- * Arguments:
- *      args - Object (Dict<String : any>), The GET and POST arguments posited
- *          by a given request.
- * Returns:
- *      undefined / None
+ * The main function when called from a recognized web server or with the web
+ * setting set.
+ * Used internally by the internal node web server.
+ * @param Object<Dict<String : any>>    args    The POST arguments posited
+ *          by a given request, if any.
+ * @return  String      The headers and content for a given request.
  */
 function index( args ){
 
