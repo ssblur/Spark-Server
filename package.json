@@ -14,5 +14,9 @@
     "url": "https://gitlab.cs.ecu.edu/csci-4230-spring-2020/tko-d/spark-server.git"
   },
   "author": "Patrick Emery",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "http": "0.0.0"
+  }
 }

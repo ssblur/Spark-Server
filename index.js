@@ -9,6 +9,7 @@
 /**
  * The main function when called from a command line.
  * Launching this way automatically launches a node web server.
+ * @see index
  * @param Array<String> args        The command line arguments provided.
  * @return void
  */
@@ -26,4 +27,30 @@ function main( args ){
  */
 function index( args ){
 
+}
+
+// Only run if this script is executed directly.
+if( require.main === module ){
+    var run = false;
+    // Checks if the "--server" or "-s" have been passed to the script.
+    process.argv.forEach( argument =>{
+        if( argument.startsWith("--") ){
+            if( argument=="--server" ){
+                main( process.argv );
+                run = true;
+            }
+        } else if( argument.startsWith("-") ){
+            if( argument.includes("s") ){
+                main( process.argv );
+                run = true;
+            }
+        }
+    })
+
+    // If no alternate run method was defined, this just runs the script as if
+    // it were hosted on a web server.
+    if( !run ){
+        console.log( "Module run directly without server arg. Running as script.")
+        print( index( {} ) )
+    }
 }
