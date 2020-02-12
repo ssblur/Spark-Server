@@ -6,6 +6,18 @@
  * @author Patrick Emery
  */
 
+
+const express = require( 'express' );
+const session = require( 'express-session' );
+const parser = require( 'body-parser' );
+const router = express.Router();
+const app = express();
+
+app.use( session( {secret: '', saveUninitialized: true, resave: true} ) );
+app.use( parser.json());
+app.use( bodyParser.urlencoded( {extended: true} ) );
+app.use( express.static(__dirname + '/pages') );
+
 /**
  * The main function when called from a command line.
  * Launching this way automatically launches a node web server.
@@ -14,9 +26,7 @@
  * @return void
  */
 function main( args ){
-    global route;
-    const express = require( "express" )
-    const route =
+
 }
 
 // Only run if this script is executed directly.
