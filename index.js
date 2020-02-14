@@ -28,12 +28,7 @@ lib.config.load( __dirname ).then( data => {
     config = data;
     // Registering middleware.
     app.use( session( {secret: config.secret, saveUninitialized: true, resave: true} ) );
-    app.use( parser.json() );
     app.use( parser.urlencoded( {extended: true} ) );
-
-    app.use( ( req, res ) => {
-
-    });
 
     // Defining an error handler.
     app.use( ( err, req, res, next ) => {
