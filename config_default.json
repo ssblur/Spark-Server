@@ -1,3 +1,23 @@
 {
-    "secret" : "shhh"
+    "secret" : "shhh",
+    "server" : {
+        "http" : {
+            "enabled" : false,
+            "port" : 80,
+            "ssl" : {
+                "use-ssl" : false,
+                "certificate" : "",
+                "private-key" : ""
+            }
+        },
+        "https" : {
+            "enabled" : true,
+            "port" : 443,
+            "ssl" : {
+                "use-ssl" : true,
+                "certificate" : "./certificate.pem",
+                "private-key" : "./privkey.pem"
+            }
+        }
+    }
 }

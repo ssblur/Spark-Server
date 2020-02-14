@@ -11,17 +11,29 @@
 const express = require( 'express' );
 const session = require( 'express-session' );
 const parser = require( 'body-parser' );
+const https = require( 'https' );
+const fs = require( 'fs' );
 const router = express.Router();
 const app = express();
+const disabled_app = express();
 
 const lib = require( "./lib" );
 var config;
+
+disabled_app.use( ( req, res ) => {
+    res.send("The server cannot be accessed through this port.")
+})
+
 lib.config.load( __dirname ).then( data => {
     config = data;
     // Registering middleware.
     app.use( session( {secret: config.secret, saveUninitialized: true, resave: true} ) );
     app.use( parser.json() );
     app.use( parser.urlencoded( {extended: true} ) );
+
+    app.use( ( req, res ) => {
+
+    });
 
     // Defining an error handler.
     app.use( ( err, req, res, next ) => {
@@ -31,17 +43,47 @@ lib.config.load( __dirname ).then( data => {
     const default_page = ( req, res ) => {};
 
     // A request for dispatching a login code to a user.
-    app.post( "/login", lib.login.login || default_page );
-    app.get( "/login", lib.defaults.login_get || default_page );
+    app.post( "/account/login", lib.login.login || default_page );
+    app.get( "/account/login", lib.defaults.login_get || default_page );
 
     // A request for verifying a login with a verification code.
-    app.post( "/verify", lib.login.verify || default_page );
-    app.get( "/verify", lib.defaults.verify_get || default_page );
+    app.post( "/account/verify", lib.login.verify || default_page );
+    app.get( "/account/verify", lib.defaults.verify_get || default_page );
 
     // A placeholder request for icon submission.
     app.put( "/submit_icon", lib.icon.put || default_page );
 
-    app.listen( 8080, () => { console.log( "Application loaded on port 8080." ); } );
+    // Loads in configured servers, using SSL if specified.
+    // Disabled servers are still loaded, but explicitly serve a banner noting
+    // that they are disabled.
+    for(const i in config["server"]){
+        const server = config["server"][i];
+        if(server["enabled"]){
+            if(server["ssl"]["use-ssl"]){
+                const private_key = fs.readFileSync(server["ssl"]["private-key"]);
+                const certificate = fs.readFileSync(server["ssl"]["certificate"]);
+                console.log( "Loading application with SSL on port "+server["port"] );
+                https.createServer({
+                    key: private_key,
+                    cert: certificate
+                }, app).listen( parseInt(server["port"]) );
+            } else {
+                var http = app.listen( parseInt(server["port"]), () => { console.log( "Application loaded on port "+http.address().port ); } );
+            }
+        } else {
+            if(server["ssl"]["use-ssl"]){
+                const private_key = fs.readFileSync(server["ssl"]["private-key"]);
+                const certificate = fs.readFileSync(server["ssl"]["certificate"]);
+                console.log( "Loading application with SSL on port "+server["port"] );
+                https.createServer({
+                    key: private_key,
+                    cert: certificate
+                }, disabled_app).listen( parseInt(server["port"]) );
+            } else {
+                var http = disabled_app.listen( parseInt(server["port"]), () => { console.log( "Application loaded on port "+http.address().port ); } );
+            }
+        }
+    }
 });
 
 /**
