@@ -24,8 +24,16 @@ disabled_app.use( ( req, res ) => {
     res.send("The server cannot be accessed through this port.")
 })
 
-lib.config.load( __dirname ).then( data => {
-    config = data;
+config = lib.config.load( __dirname )
+
+/**
+ * The main function when called from a command line.
+ * Launching this way automatically launches a node web server.
+ * @see index
+ * @param Array<String> args        The command line arguments provided.
+ * @return void
+ */
+function main( args ){
     // Registering middleware.
     app.use( session( {secret: config.secret, saveUninitialized: true, resave: true} ) );
     app.use( parser.urlencoded( {extended: true} ) );
@@ -79,17 +87,6 @@ lib.config.load( __dirname ).then( data => {
             }
         }
     }
-});
-
-/**
- * The main function when called from a command line.
- * Launching this way automatically launches a node web server.
- * @see index
- * @param Array<String> args        The command line arguments provided.
- * @return void
- */
-function main( args ){
-
 }
 
 // Only run if this script is executed directly.
