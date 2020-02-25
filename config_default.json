@@ -16,7 +16,11 @@
             "ssl" : {
                 "use-ssl" : true,
                 "certificate" : "./certificate.pem",
-                "private-key" : "./privkey.pem"
+                "private-key" : "./privkey.pem",
+                "__comment" : [
+                    "These are fairly straightforward, use-ssl is whether this uses SSL, and certificate",
+                    "and private-key are paths to the certificate and private key to use."
+                ]
             }
         }
     },
@@ -26,13 +30,17 @@
             "auth" : {
                 "user" : "",
                 "pass" : ""
-            }
+            },
+            "__comment" : "This should be a nodemailer transport config object. See: https://nodemailer.com/usage/"
         },
         "templates" : {
             "verification-code" : {
                 "subject" : "Your Spark Verification Code",
                 "body" : { "template" : "templates/code_template.html" }
-            }
+            },
+            "__comment" : [
+                "The body of these templates can either be a string or a template object. See: lib/templates.js"
+            ]
         },
         "metadata" : {
             "from" : "\"Spark Notifications\" <notifications.spark@gmail.com>"
