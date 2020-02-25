@@ -19,5 +19,23 @@
                 "private-key" : "./privkey.pem"
             }
         }
+    },
+    "mail" : {
+        "email-address" : {
+            "service" : "gmail",
+            "auth" : {
+                "user" : "",
+                "pass" : ""
+            }
+        },
+        "templates" : {
+            "verification-code" : {
+                "subject" : "Your Spark Verification Code",
+                "body" : { "template" : "templates/code_template.html" }
+            }
+        },
+        "metadata" : {
+            "from" : "\"Spark Notifications\" <notifications.spark@gmail.com>"
+        }
     }
 }

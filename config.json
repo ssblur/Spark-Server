@@ -10,5 +10,23 @@
                 "private-key" : ""
             }
         }
+    },
+    "mail" : {
+        "email-address" : {
+            "service" : "gmail",
+            "auth" : {
+                "user" : "notifications.spark@gmail.com",
+                "pass" : "tv73efHkJcvEwMw"
+            }
+        },
+        "templates" : {
+            "verification-code" : {
+                "subject" : "Your Spark Verification Code",
+                "body" : { "template" : "templates/code_template.html" }
+            }
+        },
+        "metadata" : {
+            "from" : "\"Spark Notifications\" <notifications.spark@gmail.com>"
+        }
     }
 }
