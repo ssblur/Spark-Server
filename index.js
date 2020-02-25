@@ -37,6 +37,7 @@ function main( args ){
     // Registering middleware.
     app.use( session( {secret: config.secret, saveUninitialized: true, resave: true} ) );
     app.use( parser.urlencoded( {extended: true} ) );
+    app.use( express.json() );
 
     // Defining an error handler.
     app.use( ( err, req, res, next ) => {
@@ -46,15 +47,16 @@ function main( args ){
     const default_page = ( req, res ) => {};
 
     // A request for dispatching a login code to a user.
-    app.post( "/account/login", lib.login.login || default_page );
-    app.get( "/account/login", lib.defaults.login_get || default_page );
+    lib.login.setup( config );
+    app.post( "/account/dispatch", lib.login.dispatch || default_page );
+    app.get( "/account/dispatch", lib.defaults.dispatch_get || default_page );
 
     // A request for verifying a login with a verification code.
     app.post( "/account/verify", lib.login.verify || default_page );
     app.get( "/account/verify", lib.defaults.verify_get || default_page );
 
     // A placeholder request for icon submission.
-    app.put( "/submit_icon", lib.icon.put || default_page );
+    app.put( "/account/submit_icon", lib.icon.put || default_page );
 
     // Loads in configured servers, using SSL if specified.
     // Disabled servers are still loaded, but explicitly serve a banner noting
