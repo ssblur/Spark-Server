@@ -16,11 +16,6 @@ const fs = require('fs');
 const lib = require('./lib');
 
 const app = express();
-const disabledApp = express();
-
-disabledApp.use((req, res) => {
-  res.send('The server cannot be accessed through this port.');
-});
 
 const config = lib.config.load(__dirname);
 
@@ -79,16 +74,6 @@ function main() {
         } else {
           const http = app.listen(parseInt(server.port, 10), () => { console.log(`Application loaded on port ${http.address().port}`); });
         }
-      } else if (server.ssl['use-ssl']) {
-        const privateKey = fs.readFileSync(server.ssl['private-key']);
-        const certificate = fs.readFileSync(server.ssl.certificate);
-        console.log(`Loading application with SSL on port ${server.port}`);
-        https.createServer({
-          key: privateKey,
-          cert: certificate,
-        }, disabledApp).listen(parseInt(server.port, 10));
-      } else {
-        const http = disabledApp.listen(parseInt(server.port, 10), () => { console.log(`Application loaded on port ${http.address().port}`); });
       }
     }
   }
