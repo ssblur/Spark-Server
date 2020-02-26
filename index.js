@@ -13,11 +13,10 @@ const session = require('express-session');
 const parser = require('body-parser');
 const https = require('https');
 const fs = require('fs');
+const lib = require('./lib');
 
 const app = express();
 const disabledApp = express();
-
-const lib = require('./lib');
 
 disabledApp.use((req, res) => {
   res.send('The server cannot be accessed through this port.');
