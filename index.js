@@ -63,16 +63,17 @@ function main() {
     if (typeof config.server[key] === 'object') {
       const server = config.server[key];
       if (server.enabled) {
+        const logger = lib.logger.registerLogger(key);
         if (server.ssl['use-ssl']) {
           const privateKey = fs.readFileSync(server.ssl['private-key']);
           const certificate = fs.readFileSync(server.ssl.certificate);
-          console.log(`Loading application with SSL on port ${server.port}`);
+          logger.debug(`Loading application with SSL on port ${server.port}`);
           https.createServer({
             key: privateKey,
             cert: certificate,
           }, app).listen(parseInt(server.port, 10));
         } else {
-          const http = app.listen(parseInt(server.port, 10), () => { console.log(`Application loaded on port ${http.address().port}`); });
+          const http = app.listen(parseInt(server.port, 10), () => { logger.debug(`Application loaded on port ${http.address().port}`); });
         }
       }
     }
