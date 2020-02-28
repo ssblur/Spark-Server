@@ -45,5 +45,12 @@
         "metadata" : {
             "from" : "\"Spark Notifications\" <notifications.spark@gmail.com>"
         }
+    },
+    "mysql" : {
+        "address" : "127.0.0.1",
+        "username" : "root",
+        "password" : "",
+        "database" : "spark",
+        "table_prefix" : ""
     }
 }
