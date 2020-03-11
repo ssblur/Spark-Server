@@ -7,7 +7,7 @@ stages:
 
 variables:
   DOCKER_TLS_CERTDIR: ""
-  CONTAINER_IMAGE: theconartist/spark-server:${CI_COMMIT_SHORT_SHA}
+  CONTAINER_IMAGE: theconartist/spark-server
 
 build:
   stage: build
