@@ -1,5 +1,5 @@
 {
-    "secret" : ${Secret},
+    "secret" : "$Secret",
     "server" : {
         "http" : {
             "enabled" : false,
