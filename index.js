@@ -27,6 +27,13 @@ const config = lib.config.load(__dirname);
  * @return void
  */
 function main() {
+  lib.mysql.connect(
+    config.mysql.address,
+    config.mysql.username,
+    config.mysql.password,
+    config.mysql.database,
+  );
+
   // Registering middleware.
   app.use(session({ secret: config.secret, saveUninitialized: true, resave: true }));
   app.use(parser.urlencoded({ extended: true }));
@@ -57,8 +64,7 @@ function main() {
   app.get('/', lib.defaults.serverActive || defaultPage);
 
   // Loads in configured servers, using SSL if specified.
-  // Disabled servers are still loaded, but explicitly serve a banner noting
-  // that they are disabled.
+  // Disabled servers are no longer loaded.
   const keys = Object.keys(config.server);
   for (let i = 0; i < keys.length; i += 1) {
     const key = keys[i];

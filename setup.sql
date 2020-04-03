@@ -1,0 +1,1 @@
+create table verification_table (code varchar(6), exp_date datetime, email_phone varchar(70), constraint verification_table_pk primary key (email_phone));
