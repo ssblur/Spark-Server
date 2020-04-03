@@ -54,6 +54,8 @@ function main() {
   app.put('/account/modify', lib.icon.put || defaultPage);
   app.get('/account/modify', lib.defaults.modifyGet || defaultPage);
 
+  app.get('/', lib.defaults.serverActive || defaultPage);
+
   // Loads in configured servers, using SSL if specified.
   // Disabled servers are still loaded, but explicitly serve a banner noting
   // that they are disabled.
