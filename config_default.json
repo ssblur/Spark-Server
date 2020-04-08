@@ -14,7 +14,7 @@
             "enabled" : true,
             "port" : 443,
             "ssl" : {
-                "use-ssl" : true,
+                "use-ssl" : false,
                 "certificate" : "./certificate.pem",
                 "private-key" : "./privkey.pem",
                 "__comment" : [
