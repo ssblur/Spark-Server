@@ -35,7 +35,12 @@ function main() {
   );
 
   // Registering middleware.
-  app.use(session({ secret: config.secret, saveUninitialized: true, resave: true }));
+  app.use(session({
+    secret: config.secret,
+    saveUninitialized: true,
+    resave: true,
+    cookie: { secure: false, maxAge: 600000 },
+  }));
   app.use(parser.urlencoded({ extended: true }));
   app.use(express.json());
 
@@ -56,6 +61,9 @@ function main() {
   // A request for verifying a login with a verification code.
   app.post('/account/verify', lib.login.verify || defaultPage);
   app.get('/account/verify', lib.defaults.verifyGet || defaultPage);
+
+  app.get('/account', lib.login.accountInfo || defaultPage);
+  app.post('/account', lib.login.accountInfo || defaultPage);
 
   // A placeholder request for icon submission.
   app.put('/account/modify', lib.icon.put || defaultPage);
