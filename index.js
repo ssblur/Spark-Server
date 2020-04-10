@@ -65,8 +65,8 @@ function main() {
   app.get('/account', lib.login.accountInfo || defaultPage);
   app.post('/account', lib.login.accountInfo || defaultPage);
 
-  // A placeholder request for icon submission.
-  app.put('/account/modify', lib.icon.put || defaultPage);
+  // A request for account modification
+  app.put('/account/modify', lib.login.modifyAccount || defaultPage);
   app.get('/account/modify', lib.defaults.modifyGet || defaultPage);
 
   app.get('/', lib.defaults.serverActive || defaultPage);
