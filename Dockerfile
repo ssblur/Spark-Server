@@ -10,6 +10,8 @@ RUN mkdir ~/.linuxbrew/bin
 RUN ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin
 RUN eval $(~/.linuxbrew/bin/brew shellenv)
 
+RUN cd mkcert/
+
 RUN mkcert sparkserver.local
 
 RUN mv sparkserver.local-key.pem ../privkey.pem
