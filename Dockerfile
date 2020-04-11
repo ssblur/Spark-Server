@@ -3,7 +3,7 @@ WORKDIR /app
 COPY . .
 
 RUN apt update
-RUN apt install libnss3-tools --silent
+RUN apt -y install libnss3-tools
 
 RUN git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew
 RUN mkdir ~/.linuxbrew/bin
