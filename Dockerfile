@@ -27,8 +27,8 @@ RUN brew install mkcert
 
 RUN mkcert sparkserver.local
 
-RUN mv sparkserver.local-key.pem ../privkey.pem
-RUN mv sparkserver.local.pem ../certificate.pem
+RUN mv sparkserver.local-key.pem privkey.pem
+RUN mv sparkserver.local.pem certificate.pem
 
 RUN cd ..
 
