@@ -62,12 +62,42 @@ function main() {
   app.post('/account/verify', lib.login.verify || defaultPage);
   app.get('/account/verify', lib.defaults.verifyGet || defaultPage);
 
+  app.post('/account/logout', lib.login.logout || defaultPage);
+  app.get('/account/logout', lib.login.logout || defaultPage);
+
+  app.post('/account/refresh', lib.login.refreshAccount || defaultPage);
+  app.get('/account/refresh', lib.login.refreshAccount || defaultPage);
+
   app.get('/account', lib.login.accountInfo || defaultPage);
   app.post('/account', lib.login.accountInfo || defaultPage);
 
   // A request for account modification
-  app.put('/account/modify', lib.login.modifyAccount || defaultPage);
+  app.post('/account/modify', lib.login.modifyAccount || defaultPage);
   app.get('/account/modify', lib.defaults.modifyGet || defaultPage);
+
+  app.post('/chat/create', lib.messages.createChat || defaultPage);
+  app.get('/chat/create', lib.messages.createChat || defaultPage);
+
+  app.post('/chat/addMember', lib.messages.addChatMember || defaultPage);
+  app.get('/chat/addMember', lib.defaults.addMemberGet || defaultPage);
+
+  app.post('/chat/modify', lib.messages.modifyChat || defaultPage);
+  app.get('/chat/modify', lib.defaults.modifyChatGet || defaultPage);
+
+  app.post('/chat/info', lib.messages.chatInfo || defaultPage);
+  app.get('/chat/info', lib.defaults.chatInfoGet || defaultPage);
+
+  app.post('/chat/active', lib.messages.getActiveChats || defaultPage);
+  app.get('/chat/active', lib.messages.getActiveChats || defaultPage);
+
+  app.post('/chat/send', lib.messages.sendChatMessage || defaultPage);
+  app.get('/chat/send', lib.defaults.chatSendGet || defaultPage);
+
+  app.post('/notifications', lib.messages.getNotifications || defaultPage);
+  app.get('/notifications', lib.messages.getNotifications || defaultPage);
+
+  app.post('/notifications/clear', lib.messages.clearNotifications || defaultPage);
+  app.get('/notifications/clear', lib.messages.clearNotifications || defaultPage);
 
   app.get('/', lib.defaults.serverActive || defaultPage);
 
