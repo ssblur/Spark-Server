@@ -13,6 +13,7 @@ build:
   stage: build
   script:
     - export DOCKER_HOST="tcp://localhost:2375"
+    - echo $ConfigInput>config.json
     - docker login -u "$DockerUsername" -p "$DockerPassword"
     - docker build -t ${CONTAINER_IMAGE} .
     - docker tag ${CONTAINER_IMAGE} theconartist/spark-server:latest
