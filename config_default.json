@@ -2,7 +2,7 @@
     "secret" : "$Secret",
     "server" : {
         "http" : {
-            "enabled" : true,
+            "enabled" : false,
             "port" : 80,
             "ssl" : {
                 "use-ssl" : false,
@@ -11,7 +11,7 @@
             }
         },
         "https" : {
-            "enabled" : false,
+            "enabled" : true,
             "port" : 443,
             "ssl" : {
                 "use-ssl" : true,
