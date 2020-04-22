@@ -3,7 +3,7 @@
     "server" : {
         "http" : {
             "enabled" : true,
-            "port" : 100,
+            "port" : 80,
             "ssl" : {
                 "use-ssl" : false,
                 "certificate" : "",
