@@ -75,6 +75,9 @@ function main() {
   app.post('/account/modify', lib.login.modifyAccount || defaultPage);
   app.get('/account/modify', lib.defaults.modifyGet || defaultPage);
 
+  app.post('/account/search', lib.login.searchAccount || defaultPage);
+  app.get('/account/search', lib.defaults.searchGet || defaultPage);
+
   app.post('/chat/create', lib.messages.createChat || defaultPage);
   app.get('/chat/create', lib.messages.createChat || defaultPage);
 
