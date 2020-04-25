@@ -13,6 +13,7 @@ const session = require('express-session');
 const parser = require('body-parser');
 const https = require('https');
 const fs = require('fs');
+const process = require('process');
 const lib = require('./lib');
 
 const app = express();
@@ -47,6 +48,16 @@ function main() {
   // Defining an error handler.
   app.use((err, req, res, next) => {
     console.log('Error: ', err, req, res, next);
+  });
+
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Origin', req.headers.origin || 'http://localhost');
+    res.header('Vary', 'Origin');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', '*');
+    res.header('Access-Control-Max-Age', 86400);
+    next();
   });
 
   const defaultPage = (req, res) => {
@@ -103,6 +114,11 @@ function main() {
   app.get('/notifications/clear', lib.messages.clearNotifications || defaultPage);
 
   app.get('/', lib.defaults.serverActive || defaultPage);
+
+  if (process.argv.includes('test')) {
+    app.get('/testing/modify', lib.testing.modify || defaultPage);
+    app.get('/testing/chats', lib.testing.chats || defaultPage);
+  }
 
   // Loads in configured servers, using SSL if specified.
   // Disabled servers are no longer loaded.

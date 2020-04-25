@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Testing</title>
+        <script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <input placeholder='Email' id='email'/>
+        <input type='button' id='submit' value='Submit'/>
+        <input placeholder='Verification Code' id='code' style='display:none'/>
+        <input type='button' id='code_submit' value='Submit' style='display:none'/>
+        <div id="output"></div>
+        <script>
+            // A basic logging function. Used to render text to the page easily.
+            const log = (text) => {
+                $('#output').html($('#output').html() + text + '<br/>')
+            }
+            
+            // An error logging function. Same as above, but in red.
+            const error = (text) => {
+                $('#output').html($('#output').html() + '<p style="color:red">' + text + '</p><br/>')
+            }
+            
+            const test = () => {
+                const message = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                $.post('http://localhost/chat/create').done((response) => {
+                    log(`Created chat ${response.content.cuuid}`)
+                    log(JSON.stringify(response));
+                    const cuuid = response.content.cuuid;
+                    setTimeout(() => {
+                        log(`Sending a message to this chat which reads "${message}".`)
+                        $.post('http://localhost/chat/send', {
+                            cuuid,
+                            message_type: 'text',
+                            content: message
+                        }).done((response) => {
+                            log(`Sent message to chat ${cuuid}`)
+                            log(JSON.stringify(response));
+                            log('Checking notifications...')
+                            setTimeout(() => $.post('http://localhost/notifications').done((response) => {
+                                log('Received notifications:');
+                                log(JSON.stringify(response));
+                                log('Clearing notifications...');
+                                $.post('http://localhost/notifications/clear').done(() => log('Notifications cleared'));
+                            }), 500)
+                        }).fail((err) => {
+                            error(JSON.stringify(err));            
+                        });
+                    }, 500);
+                }).fail((err) => {
+                    error(JSON.stringify(err));
+                });
+                log(`Submitting request to modify name to ${name}`);
+            }
+            
+            // Submits verification code and begins testing.
+            $('#code_submit').click(() => {
+                $.post('http://localhost/account/verify', {
+                    email_phone: $('#email').val(),
+                    code: $('#code').val()
+                }).done((response) => {
+                    log('Account verified successfully. Beginning tests...');
+                    test()
+                }).fail((err) => {
+                    error(JSON.stringify(err));
+                })
+                $('#code').css('display', 'none');
+                $('#code_submit').css('display', 'none');
+            })
+            
+            // Submits email and dispatches verification codes.
+            $('#submit').click(() => {
+                $.post('http://localhost/account/dispatch', {
+                    email: $('#email').val()
+                }).done((response) => { 
+                    log('Verification code dispatched! Please enter your code above.');
+                    $('#code').css('display', 'inherit');
+                    $('#code_submit').css('display', 'inherit');
+                }).fail((err) => {
+                    error(JSON.stringify(err));
+                });
+                $('#email').css('display', 'none');
+                $('#submit').css('display', 'none');
+                log('Email submitted.');
+            });
+            
+            $(
+                $.post('http://localhost/account').done((response) => {
+                    log('Already logged in, proceeding with tests.');
+                    test()
+                    $('#email').css('display', 'none');
+                    $('#submit').css('display', 'none');
+                }).fail((err) => {
+                    error(JSON.stringify(err))
+                    log('Not logged in, presenting login info.');
+                })
+            )</script> 
+    </body>
+</html>
