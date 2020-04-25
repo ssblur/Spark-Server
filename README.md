@@ -17,3 +17,6 @@ Everything generally works out of the box, but you should set "secret" to some n
 
 # Usage
 After install, you can run the server with `node .`.
+
+## Test Mode
+You can initialize the server in test mode by appending the `test` flag, as in `node . test`. This will expose some pages which can be used to test features such as sending and receiving chat messages.
