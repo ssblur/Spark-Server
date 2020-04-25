@@ -10,10 +10,12 @@ To install, first you must either `git clone` this project into a folder, or dow
 
 After this, some additional node modules are needed to run this project. These can be installed by navigating to the project's download directory and running `npm install .`.
 
+You will also need to have a MySQL server running. Information on running a MySQL server yourself can be found [Here](https://dev.mysql.com/doc/mysql-getting-started/en/)
+
 ## Configuration
 To finish setting up the project, you just need to configure it. You can create `config.json` by running the file with `node .`. 
 
-Everything generally works out of the box, but you should set "secret" to some non-default value. I would suggest some randomly generated and reasonably long string.
+Everything generally works out of the box, but you should set "secret" to some non-default value (I would suggest some randomly generated and reasonably long string), and configure the "mysql" section with your server credentials.
 
 # Usage
 After install, you can run the server with `node .`.
