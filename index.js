@@ -113,7 +113,7 @@ function main() {
   app.post('/notifications/clear', lib.messages.clearNotifications || defaultPage);
   app.get('/notifications/clear', lib.messages.clearNotifications || defaultPage);
 
-  app.get('/', lib.defaults.serverActive || defaultPage);
+  app.use('/', lib.defaults.serverActive || defaultPage);
 
   if (process.argv.includes('test')) {
     app.get('/testing/modify', lib.testing.modify || defaultPage);
