@@ -113,12 +113,13 @@ function main() {
   app.post('/notifications/clear', lib.messages.clearNotifications || defaultPage);
   app.get('/notifications/clear', lib.messages.clearNotifications || defaultPage);
 
-  app.use('/', lib.defaults.serverActive || defaultPage);
-
   if (process.argv.includes('test')) {
     app.get('/testing/modify', lib.testing.modify || defaultPage);
     app.get('/testing/chats', lib.testing.chats || defaultPage);
+    app.get('/testing/contacts', lib.testing.contacts || defaultPage);
   }
+
+  app.use('/', lib.defaults.serverActive || defaultPage);
 
   // Loads in configured servers, using SSL if specified.
   // Disabled servers are no longer loaded.

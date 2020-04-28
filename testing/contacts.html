@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Contacts Testing</title>
+        <script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <input placeholder='Email' id='email'/>
+        <input type='button' id='submit' value='Submit'/>
+        <input placeholder='Verification Code' id='code' style='display:none'/>
+        <input type='button' id='code_submit' value='Submit' style='display:none'/>
+        <div id="output"></div>
+        <script>
+            // A basic logging function. Used to render text to the page easily.
+            const log = (text) => {
+                $('#output').html($('#output').html() + text + '<br/>')
+            }
+            
+            // An error logging function. Same as above, but in red.
+            const error = (text) => {
+                $('#output').html($('#output').html() + '<p style="color:red">' + text + '</p><br/>')
+            }
+
+            const generateContacts = () => {
+                const mode = Math.random()*3;
+                if(mode<1){
+                    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                }else if(mode<2){
+                    return {uuid: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)}
+                }else{
+                    return Math.random()
+                }
+            }
+            
+            const test = (iterations) => {
+                if(iterations===undefined) iterations = 20;
+                if(iterations<=0){
+                    log('Tests completed.')
+                    return;
+                }
+                const contacts = generateContacts();
+                $.post('http://localhost/account/modify', {
+                    contacts
+                }).done((response) => {
+                    const setContacts = JSON.parse(response.content.contacts)
+                    log(`Modify states contacts changed to ${setContacts}`)
+                    log(JSON.stringify(response));
+                    log('Submitting info request to verify...')
+                    setTimeout(() => {
+                        $.post('http://localhost/account').done((response) => {
+                            log(`Account states contacts are ${response.content.contacts}`)
+                            if(JSON.stringify(setContacts)===response.content.contacts){
+                                log('New and set contacts appear to match.')
+                            } else {
+                                error('New and old contacts do not match!')
+                            }
+                            log(JSON.stringify(response));
+                            test(iterations-1);
+                        }).fail((err) => {
+                            error(JSON.stringify(err));            
+                            test(iterations-1);
+                        })
+                    }, 1000)
+                }).fail((err) => {
+                    error(JSON.stringify(err));
+                    test(iterations-1);
+                });
+                log(`Submitting request to modify contacts to ${JSON.stringify(contacts)}`);
+            }
+            
+            // Submits verification code and begins testing.
+            $('#code_submit').click(() => {
+                $.post('http://localhost/account/verify', {
+                    email_phone: $('#email').val(),
+                    code: $('#code').val()
+                }).done((response) => {
+                    log('Account verified successfully. Beginning tests...');
+                    test()
+                }).fail((err) => {
+                    error(JSON.stringify(err));
+                })
+                $('#code').css('display', 'none');
+                $('#code_submit').css('display', 'none');
+            })
+            
+            // Submits email and dispatches verification codes.
+            $('#submit').click(() => {
+                $.post('http://localhost/account/dispatch', {
+                    email: $('#email').val()
+                }).done((response) => { 
+                    log('Verification code dispatched! Please enter your code above.');
+                    $('#code').css('display', 'inherit');
+                    $('#code_submit').css('display', 'inherit');
+                }).fail((err) => {
+                    error(JSON.stringify(err));
+                });
+                $('#email').css('display', 'none');
+                $('#submit').css('display', 'none');
+                log('Email submitted.');
+            });
+            
+            $(
+                $.post('http://localhost/account').done((response) => {
+                    log('Already logged in, proceeding with tests.');
+                    test()
+                    $('#email').css('display', 'none');
+                    $('#submit').css('display', 'none');
+                }).fail((err) => {
+                    error(JSON.stringify(err))
+                    log('Not logged in, presenting login info.');
+                })
+            )</script> 
+    </body>
+</html>
