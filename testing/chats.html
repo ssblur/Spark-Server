@@ -21,32 +21,37 @@
                 $('#output').html($('#output').html() + '<p style="color:red">' + text + '</p><br/>')
             }
             
+            const message = (iterations, cuuid) => {
+                if(iterations===0) return;
+                const text = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                iterations -= 1;
+                log(`Sending a message to this chat which reads "${text}".`);
+                $.post('http://localhost/chat/send', {
+                    cuuid,
+                    message_type: 'text',
+                    content: text
+                }).done((response) => {
+                    log(`Sent message to chat ${cuuid}`)
+                    log(JSON.stringify(response));
+                    log('Checking notifications...')
+                    setTimeout(() => $.post('http://localhost/notifications').done((response) => {
+                        log('Received notifications:');
+                        log(JSON.stringify(response));
+                        log('Clearing notifications...');
+                        $.post('http://localhost/notifications/clear').done(() => log('Notifications cleared'));
+                        setTimeout(() => message(iterations, cuuid), 500);
+                    }), 500);
+                }).fail((err) => {
+                    error(JSON.stringify(err));            
+                });
+            }
+
             const test = () => {
-                const message = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                 $.post('http://localhost/chat/create').done((response) => {
                     log(`Created chat ${response.content.cuuid}`)
                     log(JSON.stringify(response));
                     const cuuid = response.content.cuuid;
-                    setTimeout(() => {
-                        log(`Sending a message to this chat which reads "${message}".`)
-                        $.post('http://localhost/chat/send', {
-                            cuuid,
-                            message_type: 'text',
-                            content: message
-                        }).done((response) => {
-                            log(`Sent message to chat ${cuuid}`)
-                            log(JSON.stringify(response));
-                            log('Checking notifications...')
-                            setTimeout(() => $.post('http://localhost/notifications').done((response) => {
-                                log('Received notifications:');
-                                log(JSON.stringify(response));
-                                log('Clearing notifications...');
-                                $.post('http://localhost/notifications/clear').done(() => log('Notifications cleared'));
-                            }), 500)
-                        }).fail((err) => {
-                            error(JSON.stringify(err));            
-                        });
-                    }, 500);
+                    setTimeout(() => message(20, cuuid), 500);
                 }).fail((err) => {
                     error(JSON.stringify(err));
                 });
