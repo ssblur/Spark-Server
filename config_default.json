@@ -52,5 +52,6 @@
         "password" : "",
         "database" : "spark",
         "table_prefix" : ""
-    }
+    },
+    "whitelist" : "*"
 }

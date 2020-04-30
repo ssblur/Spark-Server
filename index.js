@@ -36,6 +36,14 @@ function main() {
     config.mysql.database,
   );
 
+  const corsOptions = {
+    origin: (origin, next) => {
+      if (config.whitelist === '*') { next(null, true); } else if (config.whitelist.includes(origin)) { next(null, true); } else next(new Error('Domain not permitted.'));
+    },
+  };
+  // Allowing CORS on this app.
+  app.use(cors(corsOptions));
+
   // Registering middleware.
   app.use(session({
     secret: config.secret,
@@ -58,9 +66,6 @@ function main() {
     res.header('Access-Control-Max-Age', 86400);
     next();
   });
-
-  // Allowing CORS on this app.
-  app.use(cors());
 
   const defaultPage = (req, res) => {
     console.log('Default Page Loaded!', req.address, res.server);
