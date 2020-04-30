@@ -42,14 +42,17 @@ function main() {
     resave: true,
     cookie: { secure: false, maxAge: 600000 },
   }));
+  // Middleware for parsing encoded information in GET requests.
   app.use(parser.urlencoded({ extended: true }));
+  // Middleware for parsing incoming JSON ahead of time.
   app.use(express.json());
 
-  // Defining an error handler.
+  // Defining an incredibly simple error handler.
   app.use((err, req, res, next) => {
     console.log('Error: ', err, req, res, next);
   });
 
+  // Setting headers so that Cookies work cross-domain and only expire after a day.
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
@@ -73,12 +76,15 @@ function main() {
   app.post('/account/verify', lib.login.verify || defaultPage);
   app.get('/account/verify', lib.defaults.verifyGet || defaultPage);
 
+  // A request for logging out.
   app.post('/account/logout', lib.login.logout || defaultPage);
   app.get('/account/logout', lib.login.logout || defaultPage);
 
+  // An interface for refreshing your session.
   app.post('/account/refresh', lib.login.refreshAccount || defaultPage);
   app.get('/account/refresh', lib.login.refreshAccount || defaultPage);
 
+  // An interface for getting account information.
   app.get('/account', lib.login.accountInfo || defaultPage);
   app.post('/account', lib.login.accountInfo || defaultPage);
 
@@ -86,45 +92,58 @@ function main() {
   app.post('/account/modify', lib.login.modifyAccount || defaultPage);
   app.get('/account/modify', lib.defaults.modifyGet || defaultPage);
 
+  // An interface for searching for new contacts or getting other users' info.
   app.post('/account/search', lib.login.searchAccount || defaultPage);
   app.get('/account/search', lib.defaults.searchGet || defaultPage);
 
+  // An interface for creating new chats.
   app.post('/chat/create', lib.messages.createChat || defaultPage);
   app.get('/chat/create', lib.messages.createChat || defaultPage);
 
+  // An interface for adding members to chats.
   app.post('/chat/addMember', lib.messages.addChatMember || defaultPage);
   app.get('/chat/addMember', lib.defaults.addMemberGet || defaultPage);
 
+  // An interface for changing chat names and pictures.
   app.post('/chat/modify', lib.messages.modifyChat || defaultPage);
   app.get('/chat/modify', lib.defaults.modifyChatGet || defaultPage);
 
+  // An interface for getting information on a given chat.
   app.post('/chat/info', lib.messages.chatInfo || defaultPage);
   app.get('/chat/info', lib.defaults.chatInfoGet || defaultPage);
 
+  // An interface for getting a user's active chats.
   app.post('/chat/active', lib.messages.getActiveChats || defaultPage);
   app.get('/chat/active', lib.messages.getActiveChats || defaultPage);
 
+  // An interface for sending a message to a given chat.
   app.post('/chat/send', lib.messages.sendChatMessage || defaultPage);
   app.get('/chat/send', lib.defaults.chatSendGet || defaultPage);
 
+  // An interface for getting messages from a given chat.
   app.post('/chat/get', lib.messages.getChatMessages || defaultPage);
   app.get('/chat/get', lib.defaults.getMessagesGet || defaultPage);
 
+  // An interface for getting the members of a chat.
   app.post('/chat/members', lib.messages.getChatUsers || defaultPage);
   app.get('/chat/members', lib.defaults.chatMemberGet || defaultPage);
 
+  // An interface for getting all unread notifications.
   app.post('/notifications', lib.messages.getNotifications || defaultPage);
   app.get('/notifications', lib.messages.getNotifications || defaultPage);
 
+  // An interface for clearing out unread notifications.
   app.post('/notifications/clear', lib.messages.clearNotifications || defaultPage);
   app.get('/notifications/clear', lib.messages.clearNotifications || defaultPage);
 
+  // Test mode pages. Should not be loaded in prod.
   if (process.argv.includes('test')) {
     app.get('/testing/modify', lib.testing.modify || defaultPage);
     app.get('/testing/chats', lib.testing.chats || defaultPage);
     app.get('/testing/contacts', lib.testing.contacts || defaultPage);
   }
 
+  // A default live-check message to check server status on.
   app.use('/', lib.defaults.serverActive || defaultPage);
 
   // Loads in configured servers, using SSL if specified.
