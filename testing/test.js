@@ -5,7 +5,7 @@
  * Tests module functionality for a most server modules.
  * @author Patrick Emery
  */
-const lib = require('./lib');
+const lib = require('../lib');
 
 (async () => {
   const log = lib.logger.registerLogger('Debug');
