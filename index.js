@@ -52,7 +52,7 @@ function main() {
 
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Origin', req.headers.origin || 'http://localhost');
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
     res.header('Vary', 'Origin');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
     res.header('Access-Control-Allow-Headers', '*');
