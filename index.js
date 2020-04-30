@@ -107,6 +107,9 @@ function main() {
   app.post('/chat/send', lib.messages.sendChatMessage || defaultPage);
   app.get('/chat/send', lib.defaults.chatSendGet || defaultPage);
 
+  app.post('/chat/get', lib.messages.getChatMessages || defaultPage);
+  app.get('/chat/get', lib.defaults.getMessagesGet || defaultPage);
+
   app.post('/chat/members', lib.messages.getChatUsers || defaultPage);
   app.get('/chat/members', lib.defaults.chatMemberGet || defaultPage);
 
