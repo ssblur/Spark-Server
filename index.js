@@ -14,6 +14,7 @@ const parser = require('body-parser');
 const https = require('https');
 const fs = require('fs');
 const process = require('process');
+const cors = require('cors');
 const lib = require('./lib');
 
 const app = express();
@@ -54,14 +55,12 @@ function main() {
 
   // Setting headers so that Cookies work cross-domain and only expire after a day.
   app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-    res.header('Vary', 'Origin');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', '*');
     res.header('Access-Control-Max-Age', 86400);
     next();
   });
+
+  // Allowing CORS on this app.
+  app.use(cors());
 
   const defaultPage = (req, res) => {
     console.log('Default Page Loaded!', req.address, res.server);
