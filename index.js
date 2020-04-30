@@ -125,7 +125,7 @@ function main() {
   app.get('/chat/send', lib.defaults.chatSendGet || defaultPage);
 
   // An interface for getting messages from a given chat.
-  app.post('/chat/get', lib.messages.getChatMessages || defaultPage);
+  app.post('/chat/get', lib.messages.chatMessages || defaultPage);
   app.get('/chat/get', lib.defaults.getMessagesGet || defaultPage);
 
   // An interface for getting the members of a chat.
